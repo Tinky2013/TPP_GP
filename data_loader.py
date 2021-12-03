@@ -8,7 +8,7 @@ import time
 class DataLoader():
     def __init__(self):
         df = pd.read_csv("data/click_count_hour.csv")
-        self.y = df['pageload'][:50]
+        self.y = df['pageload'][:20]
         self.split = int(0.7 * len(self.y))
 
         self.y_train = self.y[:self.split]
