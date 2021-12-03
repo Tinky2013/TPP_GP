@@ -1,0 +1,6 @@
+exec: full model（Mu+GP1+GP3+GPW+Decay）
+exec2: GP1+GP3+GPW+Decay
+exec3: Mu+GP3+GPW+Decay
+exec4: Mu+GP1+GPW+Decay
+exec5: Mu+GP1+GP3+Decay
+exec6: Mu+GP1+GP3+GPW
