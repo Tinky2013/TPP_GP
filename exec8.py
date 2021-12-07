@@ -40,9 +40,11 @@ def main():
         Mu = pm.HalfNormal('Mu', sigma=2)
 
         # Gaussian Process Prior
-        mean_f1 = pm.gp.mean.Constant(c=0)
+        m = pm.Normal(mu=0, sigma=2)
+
+        mean_f1 = pm.gp.mean.Constant(c=m)
         a1 = pm.HalfNormal('amplitude1', sigma=2)
-        gamma1 = pm.TruncatedNormal('time-scale1', mu=20, sigma=5, lower=0) # 3.5, 7
+        gamma1 = pm.TruncatedNormal('time-scale1', mu=2.5, sigma=5, lower=0)    # new hp
         cov_f1 = a1 ** 2 * pm.gp.cov.ExpQuad(input_dim=1, ls=gamma1)
         GP1 = pm.gp.Latent(mean_func=mean_f1, cov_func=cov_f1)
 
@@ -66,9 +68,10 @@ def main():
 
         Lambda = Mu + tt.exp(f[:split]) + tt.dot(decayKernel(y_train)**beta, y_train) * alpha
         pm.Poisson('y_val', mu=Lambda, observed=y_train)
-        trace = pm.sample(draws=10, tune=20, chains=1, target_accept=.9, random_seed=1, callback=my_callback)
+        trace = pm.sample(draws=500, tune=500, chains=1, target_accept=.9, random_seed=1, callback=my_callback)
 
     par_dt = pd.DataFrame({
+        'mean': trace['mean'],
         'Mu': trace['Mu'],
         'amplitude1': trace['amplitude1'],
         'amplitude3': trace['amplitude3'],
@@ -94,7 +97,7 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-save_path = '7' # 每个跑实验改这个路径
+save_path = '8' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()
