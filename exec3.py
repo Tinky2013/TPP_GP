@@ -16,70 +16,77 @@ timeIdx = dataLoader.timeIdx
 t = np.arange(len(y_train) + len(y_test))
 t_train, t_test = t[:split], t[split:]
 
-start = time.time()
-def my_callback(trace, draw):
-    if len(trace) % 10 == 0:
-        end = time.time()
-        print("Sample trace: ", len(trace), "Accumulate Running time:", end - start)
 
-def decayKernel(dt):
-    '''
-    传入一列数据
-    '''
-    disMat = np.array([[i-j for j in range(len(dt))] for i in range(len(dt))])   # distance matrix
+def main():
+    start = time.time()
+    def my_callback(trace, draw):
+        if len(trace) % 10 == 0:
+            end = time.time()
+            print("Sample trace: ", len(trace), "Accumulate Running time:", end - start)
 
-    disMat = np.exp(- disMat)
-    disMat[disMat>1] = 0
+    def decayKernel(dt):
+        '''
+        传入一列数据
+        '''
+        disMat = np.array([[i-j for j in range(len(dt))] for i in range(len(dt))])   # distance matrix
 
-    return disMat
+        disMat = np.exp(- disMat)
+        disMat[disMat>1] = 0
 
-with pm.Model() as model:
-    # mean
-    Mu = pm.HalfNormal('Mu', sigma=2)
+        return disMat
 
-    mean_f3 = pm.gp.mean.Constant(c=0)
-    a3 = pm.HalfNormal('amplitude3', sigma=2)
-    gamma3 = pm.TruncatedNormal('time-scale3', mu=20, sigma=5, lower=0)
-    cov_f3 = a3 ** 2 * pm.gp.cov.Periodic(input_dim=1, period=24, ls=gamma3)
-    GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
+    with pm.Model() as model:
+        # mean
+        Mu = pm.HalfNormal('Mu', sigma=2)
 
-    mean_fW = pm.gp.mean.Constant(c=0)
-    cov_fW = pm.gp.cov.WhiteNoise(sigma=1)
-    GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
+        mean_f3 = pm.gp.mean.Constant(c=0)
+        a3 = pm.HalfNormal('amplitude3', sigma=2)
+        gamma3 = pm.TruncatedNormal('time-scale3', mu=20, sigma=5, lower=0)
+        cov_f3 = a3 ** 2 * pm.gp.cov.Periodic(input_dim=1, period=24, ls=gamma3)
+        GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
 
-    # GP叠加
-    GP = GP3 + GPW
-    f = GP.prior('f', X=timeIdx)
+        mean_fW = pm.gp.mean.Constant(c=0)
+        cov_fW = pm.gp.cov.WhiteNoise(sigma=1)
+        GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
 
-    # Decay Kernel
-    alpha = pm.Gamma('occur', alpha=1, beta=1)
-    beta = pm.Gamma('decay', alpha=1, beta=1)
+        # GP叠加
+        GP = GP3 + GPW
+        f = GP.prior('f', X=timeIdx)
 
-    Lambda = Mu + tt.exp(f[:split]) + tt.dot(decayKernel(y_train)**beta, y_train) * alpha
-    pm.Poisson('y_val', mu=Lambda, observed=y_train)
-    trace = pm.sample(draws=10, tune=20, chains=1, target_accept=.9, random_seed=1, callback=my_callback)
+        # Decay Kernel
+        alpha = pm.Gamma('occur', alpha=1, beta=1)
+        beta = pm.Gamma('decay', alpha=1, beta=1)
 
-par_dt = pd.DataFrame({
-    'Mu': trace['Mu'],
-    'amplitude3': trace['amplitude3'],
-    'time-scale3': trace['time-scale3'],
-    'occur': trace['occur'],
-    'decay': trace['decay'],
-})
-par_dt.to_csv("par_dt3.csv",index=False)
+        Lambda = Mu + tt.exp(f[:split]) + tt.dot(decayKernel(y_train)**beta, y_train) * alpha
+        pm.Poisson('y_val', mu=Lambda, observed=y_train)
+        trace = pm.sample(draws=10, tune=20, chains=1, target_accept=.9, random_seed=1, callback=my_callback)
 
-with model:
-    val_samples = pm.sample_posterior_predictive(trace, random_seed=1)
-forecasts_for_train = val_samples['y_val']  # 一个样本点一行
+    par_dt = pd.DataFrame({
+        'Mu': trace['Mu'],
+        'amplitude3': trace['amplitude3'],
+        'time-scale3': trace['time-scale3'],
+        'occur': trace['occur'],
+        'decay': trace['decay'],
+    })
+    par_dt.to_csv("par_dt_"+save_path+".csv",index=False)
 
-with model:
-    Lambda = Mu + tt.exp(f[split:]) + tt.dot(decayKernel(y_test)**beta, y_test) * alpha
-    y_pred = pm.Poisson('y_pred', mu=Lambda, observed=y_test)
-    test_samples = pm.sample_posterior_predictive(trace, var_names=['y_pred'], random_seed=1)
+    with model:
+        val_samples = pm.sample_posterior_predictive(trace, random_seed=1)
+    forecasts_for_train = val_samples['y_val']  # 一个样本点一行
 
-forecasts_for_test = test_samples['y_pred']
-train_result_dt = pd.DataFrame(forecasts_for_train).T
-train_result_dt.to_csv("train_result3.csv",index=False)
-test_result_dt = pd.DataFrame(forecasts_for_test).T
-test_result_dt.to_csv("test_result3.csv",index=False)
+    with model:
+        Lambda = Mu + tt.exp(f[split:]) + tt.dot(decayKernel(y_test)**beta, y_test) * alpha
+        y_pred = pm.Poisson('y_pred', mu=Lambda, observed=y_test)
+        test_samples = pm.sample_posterior_predictive(trace, var_names=['y_pred'], random_seed=1)
+
+    forecasts_for_test = test_samples['y_pred']
+    train_result_dt = pd.DataFrame(forecasts_for_train).T
+    train_result_dt.to_csv("train_result_"+save_path+".csv",index=False)
+    test_result_dt = pd.DataFrame(forecasts_for_test).T
+    test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
+
+save_path = '3' # 每个跑实验改这个路径
+
+if __name__ == '__main__':
+    main()
 

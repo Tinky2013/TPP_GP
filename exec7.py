@@ -60,7 +60,11 @@ def main():
         GP = GP1 + GP3 + GPW
         f = GP.prior('f', X=timeIdx)
 
-        Lambda = Mu + tt.exp(f[:split])
+        # Decay Kernel
+        alpha = pm.Gamma('occur', alpha=1, beta=1)
+        beta = pm.Gamma('decay', alpha=1, beta=1)
+
+        Lambda = Mu + tt.exp(f[:split]) + tt.dot(decayKernel(y_train)**beta, y_train) * alpha
         pm.Poisson('y_val', mu=Lambda, observed=y_train)
         trace = pm.sample(draws=10, tune=20, chains=1, target_accept=.9, random_seed=1, callback=my_callback)
 
@@ -70,6 +74,8 @@ def main():
         'amplitude3': trace['amplitude3'],
         'time-scale1': trace['time-scale1'],
         'time-scale3': trace['time-scale3'],
+        'occur': trace['occur'],
+        'decay': trace['decay'],
     })
     par_dt.to_csv("par_dt_"+save_path+".csv",index=False)
 
@@ -78,7 +84,7 @@ def main():
     forecasts_for_train = val_samples['y_val']  # 一个样本点一行
 
     with model:
-        Lambda = Mu + tt.exp(f[split:])
+        Lambda = Mu + tt.exp(f[split:]) + tt.dot(decayKernel(y_test)**beta, y_test) * alpha
         y_pred = pm.Poisson('y_pred', mu=Lambda, observed=y_test)
         test_samples = pm.sample_posterior_predictive(trace, var_names=['y_pred'], random_seed=1)
 
@@ -88,7 +94,7 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-save_path = '6' # 每个跑实验改这个路径
+save_path = '7' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()
