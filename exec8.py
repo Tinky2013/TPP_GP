@@ -40,7 +40,7 @@ def main():
         Mu = pm.HalfNormal('Mu', sigma=2)
 
         # Gaussian Process Prior
-        m = pm.Normal(mu=0, sigma=2)
+        m = pm.Normal('mean', sigma=2)
 
         mean_f1 = pm.gp.mean.Constant(c=m)
         a1 = pm.HalfNormal('amplitude1', sigma=2)
