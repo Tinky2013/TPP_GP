@@ -9,21 +9,22 @@ from data_loader import DataLoader
 
 dataLoader = DataLoader()
 
-
-y = dataLoader.y
-split = dataLoader.split
-y_train = y[:split]
-y_test = y[split:]
-timeIdx = dataLoader.timeIdx
-t = np.arange(len(y_train) + len(y_test))
-t_train = t[:split]
-t_test = t[split:]
-
-
 def MSE(y_true, y_pred):
     return (np.square(y_true - y_pred).sum()) / len(y_true)
 
 def main():
+
+
+    split = int(0.7 * len(y))
+
+    y_train = y[:split]
+    y_test = y[split:]
+
+    timeIdx = np.arange(len(y_train) + len(y_test))[:, None]
+    t = np.arange(len(y_train) + len(y_test))
+
+    t_train = t[:split]
+    t_test = t[split:]
 
     forecasts_for_train = pd.read_csv('train_result_'+save_path+'.csv')
 
@@ -50,7 +51,7 @@ def main():
     plt.legend()
     plt.title('Forecasts for train')
     plt.xlabel('Day')
-    plt.show()
+    #plt.show()
 
 
     # 一行为一个样本点
@@ -80,12 +81,14 @@ def main():
     plt.legend()
     plt.title('Forecasts for test')
     plt.xlabel('Day')
-    plt.show()
+    #plt.show()
 
-    print("training MSE:", MSE(y_train, mean))
-    print("testing MSE:", MSE(y_test, means))
+    print("training MSE:", MSE(y_train, median))
+    print("testing MSE:", MSE(y_test, medians))
 
-save_path = '2' # 每个跑实验改这个路径
+df = pd.read_csv("data/data.csv")
+y = df['sys1'][:100]
+save_path = '86_1' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()
