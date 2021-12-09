@@ -1,11 +1,9 @@
-exec: Mu*mean+GP1+GP3+GPW+Decay 1.33, 52730.70
-
-exec2: GP1+GP3+GPW+Decay 1.03, 1142.20
-exec3: Mu+GP3+GPW+Decay 1.50, 1.49
-exec4: Mu+GP1+GPW+Decay 2.09, 3190.38
-exec5: Mu+GP1+GP3+Decay 1.64, 1.95
-exec6: Mu+GP1+GP3+GPW 1.04, 36966.16
-exec7: full model（Mu+GP1+GP3+GPW+Decay）1.52, 1.88
+exec0：base
+exec1：base-decay
+exec2：base-wn
+exec3：base-per
+exec4：base+poly
+exec5：base+SE
 
 dataset：
 d1: sys1

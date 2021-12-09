@@ -39,10 +39,6 @@ def main():
         Mu = pm.HalfNormal('Mu', sigma=2)
 
         # Gaussian Process Prior
-        m0 = pm.Normal('mean0', sigma=2)
-        mean_f0 = pm.gp.mean.Constant(c=m0)
-        cov_f0 = pm.gp.cov.Polynomial(input_dim=1, c=0, d=2, offset=0)
-        GP0 = pm.gp.Latent(mean_func=mean_f0, cov_func=cov_f0)
 
         mean_f3 = pm.gp.mean.Constant(c=0)
         a3 = pm.HalfNormal('amplitude3', sigma=2)
@@ -55,24 +51,18 @@ def main():
         GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
 
         # GP叠加
-        GP = GP0 + GP3 + GPW
+        GP = GP3 + GPW
         f = GP.prior('f', X=timeIdx)
 
-        # Decay Kernel
-        alpha = pm.Gamma('occur', alpha=1, beta=1)
-        beta = pm.Gamma('decay', alpha=1, beta=1)
 
-        Lambda = Mu + tt.exp(f[:split]) + tt.dot(decayKernel(y_train)**beta, y_train) * alpha
+        Lambda = Mu + tt.exp(f[:split])
         pm.Poisson('y_val', mu=Lambda, observed=y_train)
         trace = pm.sample(draws=500, tune=500, chains=1, target_accept=.9, random_seed=42, callback=my_callback)
 
     par_dt = pd.DataFrame({
-        'mean0': trace['mean0'],
 
         'amplitude3': trace['amplitude3'],
         'time-scale3': trace['time-scale3'],
-        'occur': trace['occur'],
-        'decay': trace['decay'],
         'Mu': trace['Mu'],
     })
     par_dt.to_csv("par_dt_"+save_path+".csv",index=False)
@@ -82,7 +72,7 @@ def main():
     forecasts_for_train = val_samples['y_val']  # 一个样本点一行
 
     with model:
-        Lambda = Mu + tt.exp(f[split:]) + tt.dot(decayKernel(y_test)**beta, y_test) * alpha
+        Lambda = Mu + tt.exp(f[split:])
         y_pred = pm.Poisson('y_pred', mu=Lambda, observed=y_test)
         test_samples = pm.sample_posterior_predictive(trace, var_names=['y_pred'], random_seed=42)
 
@@ -92,9 +82,9 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-df = pd.read_csv("data/click_count_hour.csv")
-y = df['click'][:100]
-save_path = 'df7_4' # 每个跑实验改这个路径
+df = pd.read_csv("data/data.csv")
+y = df['sys1']
+save_path = 'df1_1' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()

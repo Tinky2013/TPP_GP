@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 import theano.tensor as tt
 import time
 
-from data_loader import DataLoader
-
-dataLoader = DataLoader()
 
 def MSE(y_true, y_pred):
     return (np.square(y_true - y_pred).sum()) / len(y_true)
@@ -86,9 +83,11 @@ def main():
     print("training MSE:", MSE(y_train, median))
     print("testing MSE:", MSE(y_test, medians))
 
-df = pd.read_csv("data/data.csv")
-y = df['sys1'][:100]
-save_path = '86_1' # 每个跑实验改这个路径
+df = pd.read_csv("data/click_count_hour.csv")
+y = df['click'][:100]
+# df = pd.read_csv("data/data.csv")
+# y = df['sys3'][:100]
+save_path = 'df7_1' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()

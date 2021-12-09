@@ -39,19 +39,6 @@ def main():
         Mu = pm.HalfNormal('Mu', sigma=2)
 
         # Gaussian Process Prior
-        m1 = pm.Normal('mean1', sigma=1)
-        mean_f1 = pm.gp.mean.Constant(c=m1)
-        a1 = pm.HalfNormal('amplitude1', sigma=2)
-        gamma1 = pm.TruncatedNormal('time-scale1', mu=1, sigma=5, lower=0)    # new hp
-        cov_f1 = a1 ** 2 * pm.gp.cov.ExpQuad(input_dim=1, ls=gamma1)
-        GP1 = pm.gp.Latent(mean_func=mean_f1, cov_func=cov_f1)
-
-        m2 = pm.Normal('mean2', sigma=10)
-        mean_f2 = pm.gp.mean.Constant(c=m2)
-        a2 = pm.HalfNormal('amplitude2', sigma=2)
-        gamma2 = pm.TruncatedNormal('time-scale2', mu=10, sigma=5, lower=0)    # new hp
-        cov_f2 = a2 ** 2 * pm.gp.cov.ExpQuad(input_dim=1, ls=gamma2)
-        GP2 = pm.gp.Latent(mean_func=mean_f2, cov_func=cov_f2)
 
         mean_f3 = pm.gp.mean.Constant(c=0)
         a3 = pm.HalfNormal('amplitude3', sigma=2)
@@ -59,12 +46,8 @@ def main():
         cov_f3 = a3 ** 2 * pm.gp.cov.Periodic(input_dim=1, period=24, ls=gamma3)
         GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
 
-        mean_fW = pm.gp.mean.Constant(c=0)
-        cov_fW = pm.gp.cov.WhiteNoise(sigma=1)
-        GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
-
         # GP叠加
-        GP = GP1 + GP2 + GP3 + GPW
+        GP = GP3
         f = GP.prior('f', X=timeIdx)
 
         # Decay Kernel
@@ -76,14 +59,6 @@ def main():
         trace = pm.sample(draws=500, tune=500, chains=1, target_accept=.9, random_seed=42, callback=my_callback)
 
     par_dt = pd.DataFrame({
-
-        'mean1': trace['mean1'],
-        'amplitude1': trace['amplitude1'],
-        'time-scale1': trace['time-scale1'],
-
-        'mean2': trace['mean2'],
-        'amplitude2': trace['amplitude2'],
-        'time-scale2': trace['time-scale2'],
 
         'amplitude3': trace['amplitude3'],
         'time-scale3': trace['time-scale3'],
@@ -108,9 +83,9 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-df = pd.read_csv("data/data.csv")
-y = df['sys1']
-save_path = 'df1_2' # 每个跑实验改这个路径
+df = pd.read_csv("data/click_count_hour.csv")
+y = df['click']
+save_path = 'df7_2' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()

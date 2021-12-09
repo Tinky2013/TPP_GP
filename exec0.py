@@ -87,9 +87,9 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-df = pd.read_csv("data/data.csv")
-y = df['sys1']
-save_path = 'df1_0' # 每个跑实验改这个路径
+df = pd.read_csv("data/click_count_hour.csv")
+y = df['click'][:100]
+save_path = 'df7_0' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()

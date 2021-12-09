@@ -39,10 +39,6 @@ def main():
         Mu = pm.HalfNormal('Mu', sigma=2)
 
         # Gaussian Process Prior
-        m0 = pm.Normal('mean0', sigma=2)
-        mean_f0 = pm.gp.mean.Constant(c=m0)
-        cov_f0 = pm.gp.cov.Polynomial(input_dim=1, c=0, d=2, offset=0)
-        GP0 = pm.gp.Latent(mean_func=mean_f0, cov_func=cov_f0)
 
         mean_f3 = pm.gp.mean.Constant(c=0)
         a3 = pm.HalfNormal('amplitude3', sigma=2)
@@ -50,12 +46,8 @@ def main():
         cov_f3 = a3 ** 2 * pm.gp.cov.Periodic(input_dim=1, period=24, ls=gamma3)
         GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
 
-        mean_fW = pm.gp.mean.Constant(c=0)
-        cov_fW = pm.gp.cov.WhiteNoise(sigma=1)
-        GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
-
         # GP叠加
-        GP = GP0 + GP3 + GPW
+        GP = GP3
         f = GP.prior('f', X=timeIdx)
 
         # Decay Kernel
@@ -67,7 +59,6 @@ def main():
         trace = pm.sample(draws=500, tune=500, chains=1, target_accept=.9, random_seed=42, callback=my_callback)
 
     par_dt = pd.DataFrame({
-        'mean0': trace['mean0'],
 
         'amplitude3': trace['amplitude3'],
         'time-scale3': trace['time-scale3'],
@@ -92,9 +83,9 @@ def main():
     test_result_dt = pd.DataFrame(forecasts_for_test).T
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
-df = pd.read_csv("data/click_count_hour.csv")
-y = df['click'][:100]
-save_path = 'df7_4' # 每个跑实验改这个路径
+df = pd.read_csv("data/data.csv")
+y = df['sys2']
+save_path = 'df2_2' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()
