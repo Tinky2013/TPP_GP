@@ -36,8 +36,8 @@ def main():
         # GP1 = pm.gp.Latent(mean_func=mean_f1, cov_func=cov_f1)
 
         # SE核
-        mu2 = pm.Normal('mu2', sigma=2)
-        #mu2=0
+        # mu2 = pm.Normal('mu2', sigma=10)
+        mu2=0
         mean_f2 = pm.gp.mean.Constant(c=mu2)
         a2 = pm.HalfNormal('amplitude2', sigma=2)
         gamma2 = pm.TruncatedNormal('time-scale2', mu=10, sigma=5, lower=0)  # new hp
@@ -45,17 +45,17 @@ def main():
         GP2 = pm.gp.Latent(mean_func=mean_f2, cov_func=cov_f2)
 
         # 周期核
-        mean_f3 = pm.gp.mean.Constant(c=0)
-        l3 = pm.TruncatedNormal('time-scale3', mu=20, sigma=5, lower=0)
-        cov_f3 = pm.gp.cov.Periodic(input_dim=1, period=24, ls=l3)
-        GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
+        # mean_f3 = pm.gp.mean.Constant(c=0)
+        # l3 = pm.TruncatedNormal('time-scale3', mu=20, sigma=5, lower=0)
+        # cov_f3 = pm.gp.cov.Periodic(input_dim=1, period=24, ls=l3)
+        # GP3 = pm.gp.Latent(mean_func=mean_f3, cov_func=cov_f3)
 
         # 白噪声
         mean_fW = pm.gp.mean.Constant(c=0)
         cov_fW = pm.gp.cov.WhiteNoise(sigma=1)
         GPW = pm.gp.Latent(mean_func=mean_fW, cov_func=cov_fW)
 
-        GP = GP3 + GPW + GP2
+        GP = GPW + GP2
 
         f = GP.prior('f', X=timeIdx)
 
@@ -66,10 +66,10 @@ def main():
     par_dt = pd.DataFrame({
         'Lambda0': trace['Lambda0'],
         #'mu1': trace['mu1'],
-        'mu2': trace['mu2'],
+        #'mu2': trace['mu2'],
         'amplitude2': trace['amplitude2'],
         'time-scale2': trace['time-scale2'],
-        'time-scale3': trace['time-scale3'],
+        #'time-scale3': trace['time-scale3'],
     })
     par_dt.to_csv("par_dt_"+save_path+".csv",index=False)
 
@@ -89,8 +89,8 @@ def main():
     test_result_dt.to_csv("test_result_"+save_path+".csv",index=False)
 
 df = pd.read_csv("data/data.csv")
-y = df['sys2']
-save_path = 'df2_21' # 每个跑实验改这个路径
+y = df['sys1']
+save_path = 'df1_3' # 每个跑实验改这个路径
 
 if __name__ == '__main__':
     main()
