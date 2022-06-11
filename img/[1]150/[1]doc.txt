@@ -1,0 +1,128 @@
+P: periodic
+S: SE
+D: Decay
+Z: zero_mean
+
+click:
+【】Per+Decay
+time-scale2:      mean     sd  hdi_3%  hdi_97%  ...  mcse_sd  ess_bulk  ess_tail  r_hat
+x  19.941  5.122   9.867   28.564  ...     0.15     583.0     257.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.632  0.002   0.627    0.636        0.0      0.0     673.0     182.0    NaN
+population_mean:    mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.001  0.001     0.0    0.003        0.0      0.0     541.0     163.0    NaN
+training MSE: 6482.904816718751
+testing MSE: 4767.395352916667
+
+【】SE+Decay
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  3.564  0.364   2.878    4.164      0.036    0.025     105.0     214.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  1.419  0.491    0.97    2.393      0.321    0.264       3.0      19.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.557  0.009   0.541    0.575      0.006    0.005       2.0      29.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.003  0.003     0.0    0.009      0.001      0.0      15.0     241.0    NaN
+training MSE: 825.3695030729167
+testing MSE: 250332.69719687503
+
+【】SE+Per
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.346  0.044   0.281    0.439      0.007    0.005      39.0      82.0    NaN
+time-scale:    mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.84  0.049   0.726    0.916      0.008    0.006      38.0      66.0    NaN
+time-scale2:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  1.334  0.374   0.884    2.046      0.078    0.056      16.0      39.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.073  0.042     0.0    0.144      0.005    0.003      85.0     141.0    NaN
+training MSE: 28.530658697916692
+testing MSE: 54000.41213208332
+
+【】SE+Per+Decay
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.583  0.073   0.469    0.732      0.006    0.004     148.0     231.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.599  0.117   0.378    0.811      0.017    0.012      59.0      51.0    NaN
+time-scale2:    mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.95  0.192   0.653    1.373       0.02    0.014      97.0     163.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.489  0.016    0.46    0.522      0.001    0.001     193.0     236.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.003  0.003     0.0    0.008        0.0      0.0     284.0     288.0    NaN
+training MSE: 241.8113998958334
+testing MSE: 8705.764492499999
+
+【】SE+Per+Decay_ZeroMean
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  3.471  0.407   2.794    4.294      0.026    0.018     245.0     215.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  2.292  0.174   1.955    2.595      0.023    0.017      58.0      85.0    NaN
+time-scale2:      mean     sd  hdi_3%  hdi_97%  ...  mcse_sd  ess_bulk  ess_tail  r_hat
+x  19.667  5.365  10.375   29.804  ...    0.201     345.0     255.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.568  0.006   0.556    0.578      0.001      0.0      87.0     231.0    NaN
+training MSE: 2172.8580802604165
+testing MSE: 8578336.639108958
+
+
+
+pageload：
+【】Per+Decay
+time-scale2:     mean    sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.518  0.09   0.345    0.679      0.012    0.008      70.0     197.0    NaN
+amplification:    mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.58  0.009   0.563    0.596      0.001    0.001     143.0     214.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.002  0.002     0.0    0.007        0.0      0.0     376.0     183.0    NaN
+training MSE: 533.4403726041667
+testing MSE: 353.00670229166667
+
+【】SE+Decay
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  2.891  0.504   2.046    3.846      0.032    0.023     241.0     333.0    NaN
+   mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x   4.0  0.591   2.784    5.022      0.062    0.044      88.0     122.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.592  0.009   0.575    0.608      0.001    0.001     106.0     101.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.002  0.002     0.0    0.007        0.0      0.0     415.0     177.0    NaN
+training MSE: 407.1156347395833
+testing MSE: 31157.828524999997
+
+【】SE+Per
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.218  0.023   0.179    0.262      0.002    0.001     153.0     147.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.927  0.079   0.797    1.064      0.008    0.006      95.0     124.0    NaN
+time-scale2:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.985  0.143   0.749    1.241       0.01    0.007     196.0     318.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.056  0.041     0.0    0.133      0.003    0.002     250.0     233.0    NaN
+training MSE: 67.655566875
+testing MSE: 9591.051298541664
+
+【】SE+Per+Decay
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  1.904  0.516    0.94    2.657      0.049    0.034     106.0     198.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  3.555  0.495   2.503    4.387       0.06    0.043      68.0     119.0    NaN
+time-scale2:      mean     sd  hdi_3%  hdi_97%  ...  mcse_sd  ess_bulk  ess_tail  r_hat
+x  19.776  4.827  11.345    29.27  ...    0.138     606.0     221.0    NaN
+amplification:     mean    sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.582  0.01   0.565      0.6      0.001      0.0     263.0     211.0    NaN
+population_mean:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.002  0.002     0.0    0.007        0.0      0.0     333.0     369.0    NaN
+training MSE: 391.5967661979167
+testing MSE: 25338.014442916672
+
+【】SE+Per+Decay_ZeroMean
+amplitude:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  1.854  0.511   1.001    2.842      0.046    0.032     124.0     228.0    NaN
+time-scale:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  3.398  0.568   2.196    4.316      0.067    0.048      73.0     111.0    NaN
+time-scale2:      mean     sd  hdi_3%  hdi_97%  ...  mcse_sd  ess_bulk  ess_tail  r_hat
+x  20.259  4.699  12.504   29.322  ...     0.11     891.0     302.0    NaN
+amplification:     mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  r_hat
+x  0.584  0.009   0.569    0.602      0.001      0.0     221.0     242.0    NaN
+training MSE: 384.1488868229167
+testing MSE: 1452.3058827083332
