@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from robustperiod import robust_period, robust_period_full, plot_robust_period
+from robustper import robust_period, robust_period_full, plot_robust_period
 
-y = np.array(pd.read_csv('data/data7.csv')['click'])
+y = np.array(pd.read_csv('data/data3.csv')['click'])
 
 plt.plot(y)
 plt.title('Dummy dataset')
